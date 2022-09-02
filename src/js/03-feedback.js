@@ -15,6 +15,7 @@
 // $ {sudo -H} npm i -g npm
 // $ npm i --save lodash.throttle
 
+import throtle from 'lodash.throttle';
 
 
 var throttle = require('lodash.throttle'); 
