@@ -20,80 +20,80 @@
 
 
 
-// import throtle from 'lodash.throttle';
-// import Player from '@vimeo/player';
-
-// const playerIframe = document.querySelector('#vimeo-player');
-// const player = new Player(playerIframe, { autoplay: true });
-
-// const PLAYER_STATE = 'player-state';
-
-// let playerState = JSON.parse(localStorage.getItem(PLAYER_STATE)) ?? {};
-
-// const setPlayerStateFromLocalStorage = () => {
-//   if (Object.keys(playerState).length === 0) return;
-
-//   player.setCurrentTime(playerState.currentTime ?? 0);
-//   player.setQuality(playerState.quality ?? 'auto');
-//   if (playerState.isPlay) {
-//     player.setVolume(0);
-//     player.play();
-//   }
-// };
-
-// setPlayerStateFromLocalStorage();
-
-// const updateLocalStorage = () =>
-//   localStorage.setItem(PLAYER_STATE, JSON.stringify(playerState));
-
-// const timeUpdate = ({ seconds }) => {
-//   playerState.currentTime = seconds;
-//   updateLocalStorage();
-// };
-
-// const playerPlay = () => {
-//   playerState.isPlay = true;
-//   updateLocalStorage();
-// };
-
-// const playerPause = ({ seconds }) => {
-//   playerState.currentTime = seconds;
-//   playerState.isPlay = false;
-//   updateLocalStorage();
-// };
-
-// const playerQuality = ({ quality }) => {
-//   playerState.quality = quality;
-//   updateLocalStorage();
-// };
-
-// const videoEnded = () => {
-//   setTimeout(() => localStorage.removeItem(PLAYER_STATE), 1000);
-//   playerState = {};
-// };
-
-// player.on('timeupdate', throtle(timeUpdate, 1000));
-// player.on('play', playerPlay);
-// player.on('pause', playerPause);
-// player.on('qualitychange', playerQuality);
-// player.on('ended', videoEnded);
-
-
-
-
+import throtle from 'lodash.throttle';
 import Player from '@vimeo/player';
-import throttle from 'lodash.throttle';
 
-const iframe = document.querySelector('iframe');
-const player = new Player(iframe);
-const getCurrentTimeUpdate = localStorage.getItem('video-current-time');
+const playerIframe = document.querySelector('#vimeo-player');
+const player = new Player(playerIframe, { autoplay: true });
 
-const setCurrentTimeUpdate = function (data) {
-  const currentTime = data.seconds;
-  console.log(data.seconds);
-  localStorage.setItem('video-current-time', currentTime);
+const PLAYER_STATE = 'player-state';
+
+let playerState = JSON.parse(localStorage.getItem(PLAYER_STATE)) ?? {};
+
+const setPlayerStateFromLocalStorage = () => {
+  if (Object.keys(playerState).length === 0) return;
+
+  player.setCurrentTime(playerState.currentTime ?? 0);
+  player.setQuality(playerState.quality ?? 'auto');
+  if (playerState.isPlay) {
+    player.setVolume(0);
+    player.play();
+  }
 };
 
-player.setCurrentTime(getCurrentTimeUpdate);
+setPlayerStateFromLocalStorage();
 
-player.on('timeupdate', throttle(setCurrentTimeUpdate, 1000));
+const updateLocalStorage = () =>
+  localStorage.setItem(PLAYER_STATE, JSON.stringify(playerState));
+
+const timeUpdate = ({ seconds }) => {
+  playerState.currentTime = seconds;
+  updateLocalStorage();
+};
+
+const playerPlay = () => {
+  playerState.isPlay = true;
+  updateLocalStorage();
+};
+
+const playerPause = ({ seconds }) => {
+  playerState.currentTime = seconds;
+  playerState.isPlay = false;
+  updateLocalStorage();
+};
+
+const playerQuality = ({ quality }) => {
+  playerState.quality = quality;
+  updateLocalStorage();
+};
+
+const videoEnded = () => {
+  setTimeout(() => localStorage.removeItem(PLAYER_STATE), 1000);
+  playerState = {};
+};
+
+player.on('timeupdate', throtle(timeUpdate, 1000));
+player.on('play', playerPlay);
+player.on('pause', playerPause);
+player.on('qualitychange', playerQuality);
+player.on('ended', videoEnded);
+
+
+
+
+// import Player from '@vimeo/player';
+// import throttle from 'lodash.throttle';
+
+// const iframe = document.querySelector('iframe');
+// const player = new Player(iframe);
+// const getCurrentTimeUpdate = localStorage.getItem('video-current-time');
+
+// const setCurrentTimeUpdate = function (data) {
+//   const currentTime = data.seconds;
+//   console.log(data.seconds);
+//   localStorage.setItem('video-current-time', currentTime);
+// };
+
+// player.setCurrentTime(getCurrentTimeUpdate);
+
+// player.on('timeupdate', throttle(setCurrentTimeUpdate, 1000));

@@ -1,3 +1,5 @@
+
+
 // HTML містить розмітку форми. Напиши скрипт, 
 // який буде зберігати значення полів у локальне сховище, коли користувач щось друкує.
 
@@ -17,26 +19,37 @@
 
 
 
-import throttle from 'lodash.throttle';
+const LOCALSTORAGE_KEY = 'feedback-form-state';
+const filterForm = document.querySelector('.feedback-form');
 
-const formRef = document.querySelector('.feedback-form');
-const inputRef = document.querySelector('input');
-const textareaRef = document.querySelector('textarea');
+hereinForm();
+var throttle = require('lodash.throttle'); 
+throttle(hereinForm, 500);
 
-const form = document.querySelector('form');
+filterForm.addEventListener('submit', evt => {
+  evt.preventDefault();
+  const formData = new FormData(filterForm);
+  formData.forEach((value, name) => console.log(value, name));
+});
 
-form.addEventListener('input', throttle(onFormInput, 500));
+filterForm.addEventListener('change', evt => {
+  let goFilters = localStorage.getItem(LOCALSTORAGE_KEY);
+  goFilters = goFilters ? JSON.parse(goFilters) : {};
+  goFilters[evt.target.name] = evt.target.value;
+  localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(goFilters));
+});
 
-function onFormInput(event) {
-  event.preventDefault();
+filterForm.addEventListener('reset', () => {
+  localStorage.removeItem(LOCALSTORAGE_KEY);
+});
 
-  const formData = new FormData(form);
-  const getFeedBack = Array.from(formData);
-  localStorage.setItem('feedback-form-state', JSON.stringify(getFeedBack));
+function hereinForm() {
+  let goFilters = localStorage.getItem(LOCALSTORAGE_KEY);
+  if (goFilters) {
+    goFilters = JSON.parse(goFilters);
+    Object.entries(goFilters).forEach(([name, value]) => {
+      filterForm.elements[name].value = value;
+    });
+  }
 }
-
-// if(inputRef.value===''){
-//     inputRef.textContent=localStorage.getItem(email.value);
-// }
-
 
