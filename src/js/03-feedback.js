@@ -15,8 +15,28 @@
 // $ {sudo -H} npm i -g npm
 // $ npm i --save lodash.throttle
 
-import throtle from 'lodash.throttle';
 
 
-var throttle = require('lodash.throttle'); 
-throttle(onForm, 500);
+import throttle from 'lodash.throttle';
+
+const formRef = document.querySelector('.feedback-form');
+const inputRef = document.querySelector('input');
+const textareaRef = document.querySelector('textarea');
+
+const form = document.querySelector('form');
+
+form.addEventListener('input', throttle(onFormInput, 500));
+
+function onFormInput(event) {
+  event.preventDefault();
+
+  const formData = new FormData(form);
+  const getFeedBack = Array.from(formData);
+  localStorage.setItem('feedback-form-state', JSON.stringify(getFeedBack));
+}
+
+// if(inputRef.value===''){
+//     inputRef.textContent=localStorage.getItem(email.value);
+// }
+
+
