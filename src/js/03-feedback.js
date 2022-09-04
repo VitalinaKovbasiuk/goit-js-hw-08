@@ -64,14 +64,14 @@ const refs = {
 const LOCALSTORAGE_KEY = 'feedback-form-state';
 const inputSavedText = {};
 
-refs.formEl.addEventListener('input', throttle(onTextAreaInput, 500))
+refs.formEl.addEventListener('input', throttle(onTextInput, 500))
 
 refs.formEl.addEventListener('input', evt => {
     inputSavedText[evt.target.name] = evt.target.value;
     localStorage.setItem(inputSavedText, JSON.stringify(inputSavedText));
 })
 
-function onTextAreaInput(evt) {
+function onTextInput(evt) {
     const savedText = evt.target.value;
     localStorage.setItem(LOCALSTORAGE_KEY, savedText);
 }
