@@ -19,37 +19,59 @@
 
 
 
-const LOCALSTORAGE_KEY = 'feedback-form-state';
-const filterForm = document.querySelector('.feedback-form');
+// const LOCALSTORAGE_KEY = 'feedback-form-state';
+// const filterForm = document.querySelector('.feedback-form');
 
-hereinForm();
-var throttle = require('lodash.throttle'); 
-throttle(hereinForm, 500);
+// hereinForm();
+// var throttle = require('lodash.throttle'); 
+// throttle(hereinForm, 500);
 
-filterForm.addEventListener('submit', evt => {
-  evt.preventDefault();
-  const formData = new FormData(filterForm);
-  formData.forEach((value, name) => console.log(value, name));
-});
+// filterForm.addEventListener('submit', evt => {
+//   evt.preventDefault();
+//   const formData = new FormData(filterForm);
+//   formData.forEach((value, name) => console.log(value, name));
+// });
 
-filterForm.addEventListener('change', evt => {
-  let goFilters = localStorage.getItem(LOCALSTORAGE_KEY);
-  goFilters = goFilters ? JSON.parse(goFilters) : {};
-  goFilters[evt.target.name] = evt.target.value;
-  localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(goFilters));
-});
+// filterForm.addEventListener('change', evt => {
+//   let goFilters = localStorage.getItem(LOCALSTORAGE_KEY);
+//   goFilters = goFilters ? JSON.parse(goFilters) : {};
+//   goFilters[evt.target.name] = evt.target.value;
+//   localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(goFilters));
+// });
 
-filterForm.addEventListener('reset', () => {
-  localStorage.removeItem(LOCALSTORAGE_KEY);
-});
+// filterForm.addEventListener('reset', () => {
+//   localStorage.removeItem(LOCALSTORAGE_KEY);
+// });
 
-function hereinForm() {
-  let goFilters = localStorage.getItem(LOCALSTORAGE_KEY);
-  if (goFilters) {
-    goFilters = JSON.parse(goFilters);
-    Object.entries(goFilters).forEach(([name, value]) => {
-      filterForm.elements[name].value = value;
-    });
-  }
+// function hereinForm() {
+//   let goFilters = localStorage.getItem(LOCALSTORAGE_KEY);
+//   if (goFilters) {
+//     goFilters = JSON.parse(goFilters);
+//     Object.entries(goFilters).forEach(([name, value]) => {
+//       filterForm.elements[name].value = value;
+//     });
+//   }
+// }
+
+import throttle from 'lodash.throttle';
+
+
+const refs = {
+    formEl: document.querySelector('form'),
+    textaria: document.querySelector('textarea')
 }
 
+const LOCALSTORAGE_KEY = 'feedback-form-state';
+const inputSavedText = {};
+
+refs.formEl.addEventListener('input', throttle(onTextAreaInput, 500))
+
+refs.formEl.addEventListener('input', evt => {
+    inputSavedText[evt.target.name] = evt.target.value;
+    localStorage.setItem(inputSavedText, JSON.stringify(inputSavedText));
+})
+
+function onTextAreaInput(evt) {
+    const savedText = evt.target.value;
+    localStorage.setItem(LOCALSTORAGE_KEY, savedText);
+}
