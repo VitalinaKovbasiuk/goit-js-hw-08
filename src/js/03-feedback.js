@@ -17,101 +17,49 @@
 // $ {sudo -H} npm i -g npm
 // $ npm i --save lodash.throttle
 
-
-
-// const LOCALSTORAGE_KEY = 'feedback-form-state';
-// const filterForm = document.querySelector('.feedback-form');
-
-// hereinForm();
-// var throttle = require('lodash.throttle'); 
-// throttle(hereinForm, 500);
-
-// filterForm.addEventListener('submit', evt => {
-//   evt.preventDefault();
-//   const formData = new FormData(filterForm);
-//   formData.forEach((value, name) => console.log(value, name));
-// });
-
-// filterForm.addEventListener('change', evt => {
-//   let goFilters = localStorage.getItem(LOCALSTORAGE_KEY);
-//   goFilters = goFilters ? JSON.parse(goFilters) : {};
-//   goFilters[evt.target.name] = evt.target.value;
-//   localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(goFilters));
-// });
-
-// filterForm.addEventListener('reset', () => {
-//   localStorage.removeItem(LOCALSTORAGE_KEY);
-// });
-
-// function hereinForm() {
-//   let goFilters = localStorage.getItem(LOCALSTORAGE_KEY);
-//   if (goFilters) {
-//     goFilters = JSON.parse(goFilters);
-//     Object.entries(goFilters).forEach(([name, value]) => {
-//       filterForm.elements[name].value = value;
-//     });
-//   }
-// }
-
 import throttle from 'lodash.throttle';
-
-
-const refs = {
-    formEl: document.querySelector('form'),
-    textaria: document.querySelector('textarea')
-}
-
 const LOCALSTORAGE_KEY = 'feedback-form-state';
-const inputSavedText = {};
+const filterForm = document.querySelector('.feedback-form');
+// const formEmail =  document.querySelector('input');
+// const formTextarea =  document.querySelector('textarea');
 
-refs.formEl.addEventListener('input', throttle(onTextInput, 500))
+hereinForm();
 
-refs.formEl.addEventListener('input', evt => {
-    inputSavedText[evt.target.name] = evt.target.value;
-    localStorage.setItem(inputSavedText, JSON.stringify(inputSavedText));
-})
 
-function onTextInput(evt) {
-    const savedText = evt.target.value;
-    localStorage.setItem(LOCALSTORAGE_KEY, savedText);
+filterForm.addEventListener('submit', evt => {
+  evt.preventDefault();
+  const formData = new FormData(filterForm);
+  localStorage.clear(LOCALSTORAGE_KEY);
+  filterForm.reset();
+  formData.forEach((value, name) => console.log(value, name));
+
+
+//   formEmail.value = '';
+//   formTextarea.value = '';
+});
+function onFormChange(e) {
+filterForm.addEventListener('input', evt => {
+    let userData = localStorage.getItem(LOCALSTORAGE_KEY);
+    userData = userData ? JSON.parse(userData) : {};
+    userData[e.target.name] = e.target.value;
+  
+    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(userData));
+  });
 }
+filterForm.addEventListener('change', evt => {
+  let goFilters = localStorage.getItem(LOCALSTORAGE_KEY);
+  goFilters = goFilters ? JSON.parse(goFilters) : {};
+  goFilters[evt.target.name] = evt.target.value;
+  localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(goFilters));
+});
 
-
-
-
-
-
-// import { throttle } from 'lodash';
-// import { getData, saveData } from './storage';
-
-// const keyLocalStorage = 'feedback-form-state';
-// const formRef = document.querySelector(".feedback-form");
-
-// const email = formRef.elements.email;
-// const message = formRef.elements.message;
-
-// onInit();
-
-// function onInit() {   
-//     const savedData = getData(keyLocalStorage);
-    
-//     if (savedData) {
-//         email.value = savedData.email;
-//         message.value = savedData.message;
-//     }
-// }
-
-// formRef.addEventListener('input', throttle(handleInput, 500));
-// formRef.addEventListener('submit', handleSubmit);
-
-// function handleInput(e) {    
-//     saveData({ email: email.value, message: message.value }, keyLocalStorage);
-// }
-
-// function handleSubmit(e) {    
-//     e.preventDefault();
-//     console.log({ email: email.value, message: message.value });
-//     email.value = '';
-//     message.value = '';
-//     localStorage.clear();
-// }
+function hereinForm() {
+  let goFilters = localStorage.getItem(LOCALSTORAGE_KEY);
+  if (goFilters) {
+    goFilters = JSON.parse(goFilters);
+    Object.entries(goFilters).forEach(([name, value]) => {
+      filterForm.elements[name].value = value;
+    });
+  }
+}
+filterForm.addEventListener('input', throttle (onFormChange, 500));
